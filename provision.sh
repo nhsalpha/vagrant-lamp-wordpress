@@ -6,6 +6,10 @@ php_config_file="/etc/php5/apache2/php.ini"
 xdebug_config_file="/etc/php5/mods-available/xdebug.ini"
 mysql_config_file="/etc/mysql/my.cnf"
 default_apache_index="/var/www/html/index.html"
+wordpress_username="wordpress_user"
+wordpress_password="password"
+wordpress_database="wordpress"
+wordpress_debug="true"
 
 # This function is called at the very bottom of the file
 main() {
@@ -29,6 +33,11 @@ EOD
 	apache_go
 	php_go
 	mysql_go
+
+    download_wordpress_tarball
+    extract_wordpress_to_var_www_html_directory
+    create_database_in_mysql
+    configure_wordpress_mysql_credentials
 
 	touch /var/lock/vagrant-provision
 }
@@ -112,6 +121,30 @@ mysql_go() {
 
 	service mysql restart
 	update-rc.d apache2 enable
+}
+
+download_wordpress_tarball() {
+    wget -c https://wordpress.org/latest.tar.gz -O /tmp/wordpress-latest.tar.gz
+}
+
+extract_wordpress_to_var_www_html_directory() {
+    tar --directory=/var/www/html --extract --strip-components=1 -z -f /tmp/wordpress-latest.tar.gz
+}
+
+create_database_in_mysql() {
+    mysql -u root --password=root <<EOF
+CREATE DATABASE IF NOT EXISTS ${wordpress_database};
+GRANT ALL PRIVILEGES ON ${wordpress_database}.* TO "${wordpress_username}"@"localhost" IDENTIFIED BY "${wordpress_password}";
+FLUSH PRIVILEGES;
+EOF
+}
+
+configure_wordpress_mysql_credentials() {
+    sed -e "s/define('DB_NAME'.*/define('DB_NAME', '${wordpress_database}');/g" \
+        -e "s/define('DB_USER'.*/define('DB_USER', '${wordpress_username}');/g" \
+        -e "s/define('DB_PASSWORD'.*/define('DB_PASSWORD', '${wordpress_password}');/g" \
+        -e "s/define('WP_DEBUG'.*/define('WP_DEBUG', ${wordpress_debug});/g" \
+        /var/www/html/wp-config-sample.php > /var/www/html/wp-config.php
 }
 
 main

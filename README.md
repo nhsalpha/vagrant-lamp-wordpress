@@ -1,5 +1,5 @@
-Vagrant LAMP
-============
+Vagrant LAMP with Wordpress
+===========================
 
 Want to test a new web app but don't want to affect your current Apache / MySQL / PHP system?
 Applications like MAMP are great, but they don't make it easy to maintain multiple, separate
@@ -11,6 +11,9 @@ Vagrant allows for Virtual Machines to be quickly setup, and easy to use.
 
 And this project aims to make it very easy to spinup a complete LAMP stack in a matter of minutes.
 
+It also installs the latest version of Wordpress into `/var/www/html` and
+points it at a new MySQL database.
+
 Requirements
 ------------
 * VirtualBox <http://www.virtualbox.com>
@@ -21,16 +24,21 @@ Usage
 -----
 
 ### Startup
-	$ git clone http://www.github.com/mattandersen/vagrant-lamp
-	$ cd vagrant-lamp
+	$ git clone http://www.github.com/nhsalpha/vagrant-lamp-wordpress
+	$ cd vagrant-lamp-wordpress
 	$ vagrant up
 
 That is pretty simple.
 
 ### Connecting
 
-#### Apache
-The Apache server is available at <http://localhost:8888>
+#### Wordpress
+
+The Wordpress instance (running on Apache) is available at [http://localhost:8888](http://localhost:8888)
+
+You should see the Wordpress install wizard and if all went well, it should
+already be communicating with the database thanks to the config installed at
+`/var/www/html/wp-config.php`
 
 #### MySQL
 Externally the MySQL server is available at port 8889, and when running on the VM it is available as a socket or at port 3306 as usual.
