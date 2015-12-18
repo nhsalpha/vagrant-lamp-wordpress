@@ -69,13 +69,13 @@ apache_go() {
 	cat << EOF > ${apache_vhost_file}
 <VirtualHost *:80>
         ServerAdmin webmaster@localhost
-        DocumentRoot /vagrant/src
+        DocumentRoot /var/www/html
         LogLevel debug
 
         ErrorLog /var/log/apache2/error.log
         CustomLog /var/log/apache2/access.log combined
 
-        <Directory /vagrant/src>
+        <Directory /var/www/html>
             AllowOverride All
             Require all granted
         </Directory>
