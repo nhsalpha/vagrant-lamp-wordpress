@@ -124,7 +124,7 @@ mysql_go() {
 }
 
 download_wordpress_tarball() {
-    wget -c https://wordpress.org/latest.tar.gz -O /tmp/wordpress-latest.tar.gz
+    wget --quiet -c https://wordpress.org/latest.tar.gz -O /tmp/wordpress-latest.tar.gz
 }
 
 extract_wordpress_to_var_www_html_directory() {
