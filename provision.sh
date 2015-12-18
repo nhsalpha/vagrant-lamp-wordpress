@@ -128,6 +128,7 @@ download_wordpress_tarball() {
 }
 
 extract_wordpress_to_var_www_html_directory() {
+    rm -f /var/www/html/index.html
     tar --directory=/var/www/html --extract --strip-components=1 -z -f /tmp/wordpress-latest.tar.gz
 }
 
