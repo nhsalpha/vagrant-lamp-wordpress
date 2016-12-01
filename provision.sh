@@ -10,6 +10,7 @@ wordpress_username="wordpress_user"
 wordpress_password="password"
 wordpress_database="wordpress"
 wordpress_debug="true"
+wordpress_database_dumped="wordpress.sql"
 
 # This function is called at the very bottom of the file
 main() {
@@ -37,6 +38,7 @@ EOD
     download_wordpress_tarball
     extract_wordpress_to_var_www_html_directory
     create_database_in_mysql
+	create_database_from_dump
     configure_wordpress_mysql_credentials
 
 	touch /var/lock/vagrant-provision
@@ -138,6 +140,12 @@ CREATE DATABASE IF NOT EXISTS ${wordpress_database};
 GRANT ALL PRIVILEGES ON ${wordpress_database}.* TO "${wordpress_username}"@"localhost" IDENTIFIED BY "${wordpress_password}";
 FLUSH PRIVILEGES;
 EOF
+}
+
+create_database_from_dump() {
+	if [[ ! -f ${wordpress_database_dumped} ]]; then
+		mysql -uroot -proot wordpress < /vagrant/${wordpress_database_dumped}
+	fi
 }
 
 configure_wordpress_mysql_credentials() {
