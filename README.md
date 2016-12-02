@@ -45,6 +45,9 @@ Externally the MySQL server is available at port 8889, and when running on the V
 Username: root
 Password: root
 
+#### Database import
+If you want to import existing database, file to import can be set in `provision.sh` in `wordpress_database_dumped` variable. By default, it's `wordpress.sql`
+
 Technical Details
 -----------------
 * Ubuntu 14.04 64-bit
